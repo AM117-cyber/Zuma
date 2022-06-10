@@ -5,16 +5,14 @@ int[] colores={4,4,4,4};
 int[] pos ={3,0,2,0};
 int[] pista = {};
 
-static int[] Simula (int[] colores, int[] pos, int[] pista)
-        {
-            for (int i = 0; i < colores.Length; i++)
-{if (pos[i]<0)
+public static int[] Simula (int[] colores, int[] pos, int[] pista){
+  for (int i = 0; i < colores.Length; i++)
+{
+  if (pos[i]<0)
 {
   pos[i]=0;
-}else{
-  pos[i]=Math.Min(pos[i],pista.Length);}
+} else{pos[i]=Math.Min(pos[i],pista.Length);}
   pista = Actualizarpista(colores[i],pos[i],pista);
-
   //actualizando pista
 pista = FindAndDeleteCombinations(pista,pos[i]);
 }
@@ -43,35 +41,30 @@ while (inicio>0 && pistaactualizada[inicio-1] ==pistaactualizada[pos])
 {
   inicio--;
 }
-  while (fin<pistaactualizada.Length-1 && pistaactualizada[fin+1]==pistaactualizada[pos])
-  {
-    fin++;
-  }
-  if (fin-inicio+1>=3)
-  {
-    //borrar combinaciones
-    pistaactualizada= DeletingComb(pistaactualizada,inicio,fin);
-  }
-  return pistaactualizada;
-  }
-
-static int[] DeletingComb (int[] pistaactualizada,int inicio,int fin){
-  int[] copy = new int[pistaactualizada.Length-(fin-inicio+1)];
-  int amountofsamecolorballs = fin-inicio+1;
-  for (int i = 0; i < inicio; i++)
-  {
-    copy[i] = pistaactualizada[i];
-  }
-  for (int j = fin+1; j < pistaactualizada.Length; j++)
-  {
-    copy[j-amountofsamecolorballs] = pistaactualizada[j];
-  }return copy;
+while (fin<pistaactualizada.Length-1 && pistaactualizada[fin+1]==pistaactualizada[pos])
+{
+  fin++;
+}
+if (fin-inicio+1>=3)
+{
+  //borrar combinaciones
+  pistaactualizada= DeletingComb(pistaactualizada,inicio,fin);
+}
+return pistaactualizada;
 }
 
-
-
-
-
-
-
-    
+static int[] DeletingComb (int[] pistaactualizada,int inicio,int fin){
+int[] copy = new int[pistaactualizada.Length-(fin-inicio+1)];
+int amountofsamecolorballs = fin-inicio+1;
+for (int i = 0; i < inicio; i++)
+{
+  copy[i] = pistaactualizada[i];
+}
+  for (int j = fin+1; j < pistaactualizada.Length; j++)
+{
+  copy[j-amountofsamecolorballs] = pistaactualizada[j];
+}
+return copy;
+}
+  }
+}
