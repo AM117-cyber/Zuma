@@ -4,89 +4,69 @@ int[] a = Sort(array);*/
 int[] colores={4,4,4,4};
 int[] pos ={3,0,2,0};
 int[] pista = {};
- 
-static int[]Simula(int[]colores,int[]pos, int[] pista){
-//se espera {2}
-for (int p= 0; p < pos.Length; p++)
-{
-  if (p>=pista.Length)
-  {
-   int[] pistapluscolores = new int[pista.Length+colores.Length];
-  }
-}
 
-int[] indexes = findcombination(colores);
-if(indexes.Length!=0){
-int elements=indexes[1]-indexes[0];
-int[] finalarray=new int[colores.Length-elements-1];
-while (indexes.Length!=0)
-{
-  //hay al menos una combinacion, se llama a metodo para eliminarla y findcombination para ver si hay otra.
-  finalarray = todeletecombination(colores, indexes[0], indexes[1]);
-  indexes = findcombination(finalarray);
-}
-return finalarray;
-}else{
-  return colores;
-}
-}if(colores.Length!=0||Simula(colores).Length!=0){
-foreach (var item in Simula(colores))
-{
-  System.Console.WriteLine(item);
-}
-}else
-
-
-static int[] findcombination (int[] a){
-    int inicio=0; int fin=0;
-    
-    for (int i = 0; i < a.Length-2; i++)
-  { int amountofsamecolorballs = 1;
-    for (int j = i+1; j < a.Length; j++)
-    {
-        if(a[i]==a[j])
+static int[] Simula (int[] colores, int[] pos, int[] pista)
         {
-           amountofsamecolorballs++;
-           if (amountofsamecolorballs>=3)
-           {   inicio=i;
-                fin=j;
-           }
-        }else{
-          break;
-          }
-
-    } if(fin!=0){int [] indexes = {inicio,fin};
-    return indexes;}
-  } int[] empty = {}; 
-  return empty;
-}
-
-static int[] todeletecombination(int[] a,int inicio,int fin){
-  int [] a_modified= new int[a.Length-fin+inicio-1];
-for (int i = 0; i < inicio; i++)
+            for (int i = 0; i < colores.Length; i++)
+{if (pos[i]<0)
 {
-  a_modified[i]= a[i];
+  pos[i]=0;
+}else{
+  pos[i]=Math.Min(pos[i],pista.Length);}
+  pista = Actualizarpista(colores[i],pos[i],pista);
+
+  //actualizando pista
+pista = FindAndDeleteCombinations(pista,pos[i]);
 }
-for (int j = inicio;j < a_modified.Length; j++)
-{for(int h= fin+1;h<a.Length; h++)
-  a_modified[j]= a[h];
-}
-return a_modified;
+return pista;
 }
 
+static int[] Actualizarpista(int color, int pos, int[] pista){
+int[] pistaactualizada =new int[pista.Length+1];
+for (int i = 0; i < pos; i++)
+{
+  pistaactualizada[i]=pista[i];
+}
+for (int j = pos+1; j < pista.Length+1; j++)
+{
+  pistaactualizada[j]=pista[j-1];
+}
+pistaactualizada[pos]= color;
+return pistaactualizada;
+}
 
-static int[] Insert (int[]pista, int itemincolores, int iteminpos){
-  int[] copia = new int[pista.Length+1];
-  for (int i = 0; i < iteminpos; i++)
+static int[] FindAndDeleteCombinations(int[] pistaactualizada, int pos){
+//como si originalmente la pista venia con combinaciones estas no son eliminadas sin interactuar con una bola, se busca directamente por vecindades de bolas ingresadas.
+int fin=pos;
+int inicio=pos;
+while (inicio>0 && pistaactualizada[inicio-1] ==pistaactualizada[pos])
+{
+  inicio--;
+}
+  while (fin<pistaactualizada.Length-1 && pistaactualizada[fin+1]==pistaactualizada[pos])
   {
-    copia[i] = pista[i];
-    copia[iteminpos] = itemincolores;
-    }
-    for (int i = iteminpos; i < pista.Length; i++)
-    {
-     copia[i+1]=pista[i]; 
-    }return copia;
+    fin++;
   }
+  if (fin-inicio+1>=3)
+  {
+    //borrar combinaciones
+    pistaactualizada= DeletingComb(pistaactualizada,inicio,fin);
+  }
+  return pistaactualizada;
+  }
+
+static int[] DeletingComb (int[] pistaactualizada,int inicio,int fin){
+  int[] copy = new int[pistaactualizada.Length-(fin-inicio+1)];
+  int amountofsamecolorballs = fin-inicio+1;
+  for (int i = 0; i < inicio; i++)
+  {
+    copy[i] = pistaactualizada[i];
+  }
+  for (int j = fin+1; j < pistaactualizada.Length; j++)
+  {
+    copy[j-amountofsamecolorballs] = pistaactualizada[j];
+  }return copy;
+}
 
 
 
